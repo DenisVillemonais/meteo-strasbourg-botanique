@@ -1,0 +1,19 @@
+{
+  "station": "67482001",
+  "heure_utc": null,
+  "heure_paris": null,
+  "temperature_c": null,
+  "temperature_max_c": null,
+  "temperature_min_c": null,
+  "point_rosee_c": null,
+  "pluie_1h_mm": null,
+  "humidite_pct": null,
+  "vent_direction_deg": null,
+  "vent_moyen_ms": null,
+  "rafale_ms": null,
+  "pression_pa": null,
+  "pression_mer_pa": null,
+  "latitude": null,
+  "longitude": null,
+  "site_updated_at": null
+}
