@@ -87,9 +87,7 @@
       <div id="content" hidden>
         <div class="grid">
           <div class="metric"><div class="label">Température</div><div class="value" id="temperature">–</div></div>
-          <div class="metric"><div class="label">Humidité</div><div class="value" id="humidite">–</div></div>
           <div class="metric"><div class="label">Pluie 1h</div><div class="value" id="pluie">–</div></div>
-          <div class="metric"><div class="label">Vent moyen</div><div class="value" id="vent">–</div></div>
         </div>
         <div class="footer">
           <div>Heure locale : <strong id="heure"></strong></div>
@@ -106,10 +104,8 @@
         const response = await fetch('./data/latest.json', { cache: 'no-store' });
         if (!response.ok) throw new Error('Impossible de charger latest.json');
         const data = await response.json();
-        document.getElementById('temperature').textContent = data.temperature_c ?? '–';
-        document.getElementById('humidite').textContent = data.humidite_pct != null ? data.humidite_pct + ' %' : '–';
+        document.getElementById('temperature').textContent = data.temperature_c != null ? data.temperature_c + ' °C' : '–';
         document.getElementById('pluie').textContent = data.pluie_1h_mm != null ? data.pluie_1h_mm + ' mm' : '–';
-        document.getElementById('vent').textContent = data.vent_moyen_ms != null ? data.vent_moyen_ms + ' m/s' : '–';
         document.getElementById('heure').textContent = data.heure_paris ?? '–';
         document.getElementById('maj').textContent = data.site_updated_at ?? '–';
         status.hidden = true;
