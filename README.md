@@ -5,6 +5,8 @@ Ce projet, réalisé avec la solution IA Perplexity, contient :
 - `data/latest.json` : les dernières données météo affichées sur la page ;
 - `update_weather.py` : le script Python à lancer toutes les heures sur votre serveur local.
 
+Voici les étapes principales de mise en place.
+
 ## 1. Préparer le dépôt GitHub
 
 1. Créez un dépôt GitHub, par exemple `meteo-strasbourg-botanique`.
