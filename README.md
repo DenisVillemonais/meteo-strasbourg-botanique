@@ -1,6 +1,6 @@
 # Site GitHub Pages météo — Strasbourg Botanique
 
-Ce projet contient :
+Ce projet, réalisé avec la solution IA Perplexity, contient :
 - `index.html` : la page statique publiée sur GitHub Pages ;
 - `data/latest.json` : les dernières données météo affichées sur la page ;
 - `update_weather.py` : le script Python à lancer toutes les heures sur votre serveur local.
