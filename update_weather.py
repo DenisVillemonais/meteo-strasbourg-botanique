@@ -35,11 +35,21 @@ data = r.json()
 api_status = "succès API" if data else "échec API"
 
 if not data:
-    print("Aucune donnée renvoyée par l'API Météo-France pour cet instant, mise à jour sautée.")
-    # On ne sort plus ici : on va quand même écrire latest.json
-    obs = {}
-    heure_utc = None
-    heure_paris = None
+    print("Aucune donnée renvoyée par l'API Météo-France pour cet instant, mise à jour partielle.")
+
+    if DATA_FILE.exists():
+        existing = json.loads(DATA_FILE.read_text(encoding="utf-8"))
+    else:
+        existing = {}
+
+    existing["site_updated_at"] = datetime.now(ZoneInfo("Europe/Paris")).strftime("%Y-%m-%d %H:%M:%S %Z")
+    existing["api_status"] = api_status
+
+    DATA_FILE.write_text(
+        json.dumps(existing, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    exit(0)
 else:
     obs = data[0]
     heure_utc = obs.get("validity_time")
