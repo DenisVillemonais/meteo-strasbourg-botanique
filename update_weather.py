@@ -49,7 +49,7 @@ if not data:
         json.dumps(existing, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
-    exit(0)
+    # exit(0)
 else:
     obs = data[0]
     heure_utc = obs.get("validity_time")
@@ -83,7 +83,7 @@ else:
         "api_status": api_status,
     }
 
-DATA_FILE.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    DATA_FILE.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 subprocess.run(["git", "-C", str(REPO_DIR), "add", "data/latest.json"], check=True)
 subprocess.run(["git", "-C", str(REPO_DIR), "commit", "-m", "Mise à jour météo automatique"], check=False)
