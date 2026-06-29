@@ -60,28 +60,28 @@ else:
         dt_paris = dt_utc.astimezone(ZoneInfo("Europe/Paris"))
         heure_paris = dt_paris.strftime("%Y-%m-%d %H:%M:%S %Z")
 
-result = {
-    "station": STATION_ID,
-    "heure_utc": heure_utc,
-    "heure_paris": heure_paris,
-    "temperature_c": k_to_c(obs.get("t")) if obs else None,
-    "temperature_max_c": k_to_c(obs.get("tx")) if obs else None,
-    "temperature_min_c": k_to_c(obs.get("tn")) if obs else None,
-    "point_rosee_c": k_to_c(obs.get("td")) if obs else None,
-    "pluie_1h_mm": obs.get("rr1") if obs else None,
-    "humidite_pct": obs.get("u") if obs else None,
-    "vent_direction_deg": obs.get("dd") if obs else None,
-    "vent_moyen_ms": obs.get("ff") if obs else None,
-    "rafale_ms": obs.get("raf") if obs else None,
-    "pression_pa": obs.get("pres") if obs else None,
-    "pression_mer_pa": obs.get("pmer") if obs else None,
-    "latitude": obs.get("lat") if obs else None,
-    "longitude": obs.get("lon") if obs else None,
-    # Heure de la tentative (toujours renseignée)
-    "site_updated_at": datetime.now(ZoneInfo("Europe/Paris")).strftime("%Y-%m-%d %H:%M:%S %Z"),
-    # Indicateur de statut API
-    "api_status": api_status,
-}
+    result = {
+        "station": STATION_ID,
+        "heure_utc": heure_utc,
+        "heure_paris": heure_paris,
+        "temperature_c": k_to_c(obs.get("t")) if obs else None,
+        "temperature_max_c": k_to_c(obs.get("tx")) if obs else None,
+        "temperature_min_c": k_to_c(obs.get("tn")) if obs else None,
+        "point_rosee_c": k_to_c(obs.get("td")) if obs else None,
+        "pluie_1h_mm": obs.get("rr1") if obs else None,
+        "humidite_pct": obs.get("u") if obs else None,
+        "vent_direction_deg": obs.get("dd") if obs else None,
+        "vent_moyen_ms": obs.get("ff") if obs else None,
+        "rafale_ms": obs.get("raf") if obs else None,
+        "pression_pa": obs.get("pres") if obs else None,
+        "pression_mer_pa": obs.get("pmer") if obs else None,
+        "latitude": obs.get("lat") if obs else None,
+        "longitude": obs.get("lon") if obs else None,
+        # Heure de la tentative (toujours renseignée)
+        "site_updated_at": datetime.now(ZoneInfo("Europe/Paris")).strftime("%Y-%m-%d %H:%M:%S %Z"),
+        # Indicateur de statut API
+        "api_status": api_status,
+    }
 
 DATA_FILE.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
