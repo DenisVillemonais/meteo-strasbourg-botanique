@@ -96,25 +96,30 @@
       </div>
     </section>
   </main>
-  <script>
-    async function loadData() {
-      const status = document.getElementById('status');
-      const content = document.getElementById('content');
-      try {
-        const response = await fetch('./data/latest.json', { cache: 'no-store' });
-        if (!response.ok) throw new Error('Impossible de charger latest.json');
-        const data = await response.json();
-        document.getElementById('temperature').textContent = data.temperature_c != null ? data.temperature_c + ' °C' : '–';
-        document.getElementById('pluie').textContent = data.pluie_1h_mm != null ? data.pluie_1h_mm + ' mm' : '–';
-        document.getElementById('heure').textContent = data.heure_paris ?? '–';
-        document.getElementById('maj').textContent = data.site_updated_at ?? '–';
-        status.hidden = true;
-        content.hidden = false;
-      } catch (error) {
-        status.innerHTML = '<span class="error">Erreur : ' + error.message + '</span>';
-      }
+<script>
+  async function loadData() {
+    const status = document.getElementById('status');
+    const content = document.getElementById('content');
+    try {
+      const response = await fetch('./data/latest.json', { cache: 'no-store' });
+      if (!response.ok) throw new Error('Impossible de charger latest.json');
+      const data = await response.json();
+      document.getElementById('temperature').textContent = data.temperature_c != null ? data.temperature_c + ' °C' : '–';
+      document.getElementById('pluie').textContent = data.pluie_1h_mm != null ? data.pluie_1h_mm + ' mm' : '–';
+      document.getElementById('heure').textContent = data.heure_paris ?? '–';
+
+      const majSpan = document.getElementById('maj');
+      const majText = data.site_updated_at ?? '–';
+      const statusText = data.api_status ? ` (${data.api_status})` : '';
+      majSpan.textContent = majText + statusText;
+
+      status.hidden = true;
+      content.hidden = false;
+    } catch (error) {
+      status.innerHTML = '<span class="error">Erreur : ' + error.message + '</span>';
     }
-    loadData();
-  </script>
+  }
+  loadData();
+</script>
 </body>
 </html>

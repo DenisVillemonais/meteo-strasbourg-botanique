@@ -24,45 +24,53 @@ headers = {
     "accept": "application/json",
 }
 
-
 def k_to_c(value):
     return round(value - 273.15, 2) if value is not None else None
-
 
 r = requests.get(URL, params=params, headers=headers, timeout=30)
 r.raise_for_status()
 data = r.json()
 
+# Indicateur de succès/échec de l'appel API
+api_status = "succès API" if data else "échec API"
+
 if not data:
-    raise RuntimeError("Aucune donnée renvoyée par l'API Météo-France.")
+    print("Aucune donnée renvoyée par l'API Météo-France pour cet instant, mise à jour sautée.")
+    # On ne sort plus ici : on va quand même écrire latest.json
+    obs = {}
+    heure_utc = None
+    heure_paris = None
+else:
+    obs = data[0]
+    heure_utc = obs.get("validity_time")
+    heure_paris = None
 
-obs = data[0]
-heure_utc = obs.get("validity_time")
-heure_paris = None
-
-if heure_utc is not None:
-    dt_utc = datetime.fromisoformat(heure_utc.replace("Z", "+00:00"))
-    dt_paris = dt_utc.astimezone(ZoneInfo("Europe/Paris"))
-    heure_paris = dt_paris.strftime("%Y-%m-%d %H:%M:%S %Z")
+    if heure_utc is not None:
+        dt_utc = datetime.fromisoformat(heure_utc.replace("Z", "+00:00"))
+        dt_paris = dt_utc.astimezone(ZoneInfo("Europe/Paris"))
+        heure_paris = dt_paris.strftime("%Y-%m-%d %H:%M:%S %Z")
 
 result = {
     "station": STATION_ID,
     "heure_utc": heure_utc,
     "heure_paris": heure_paris,
-    "temperature_c": k_to_c(obs.get("t")),
-    "temperature_max_c": k_to_c(obs.get("tx")),
-    "temperature_min_c": k_to_c(obs.get("tn")),
-    "point_rosee_c": k_to_c(obs.get("td")),
-    "pluie_1h_mm": obs.get("rr1"),
-    "humidite_pct": obs.get("u"),
-    "vent_direction_deg": obs.get("dd"),
-    "vent_moyen_ms": obs.get("ff"),
-    "rafale_ms": obs.get("raf"),
-    "pression_pa": obs.get("pres"),
-    "pression_mer_pa": obs.get("pmer"),
-    "latitude": obs.get("lat"),
-    "longitude": obs.get("lon"),
+    "temperature_c": k_to_c(obs.get("t")) if obs else None,
+    "temperature_max_c": k_to_c(obs.get("tx")) if obs else None,
+    "temperature_min_c": k_to_c(obs.get("tn")) if obs else None,
+    "point_rosee_c": k_to_c(obs.get("td")) if obs else None,
+    "pluie_1h_mm": obs.get("rr1") if obs else None,
+    "humidite_pct": obs.get("u") if obs else None,
+    "vent_direction_deg": obs.get("dd") if obs else None,
+    "vent_moyen_ms": obs.get("ff") if obs else None,
+    "rafale_ms": obs.get("raf") if obs else None,
+    "pression_pa": obs.get("pres") if obs else None,
+    "pression_mer_pa": obs.get("pmer") if obs else None,
+    "latitude": obs.get("lat") if obs else None,
+    "longitude": obs.get("lon") if obs else None,
+    # Heure de la tentative (toujours renseignée)
     "site_updated_at": datetime.now(ZoneInfo("Europe/Paris")).strftime("%Y-%m-%d %H:%M:%S %Z"),
+    # Indicateur de statut API
+    "api_status": api_status,
 }
 
 DATA_FILE.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
