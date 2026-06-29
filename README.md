@@ -13,21 +13,13 @@ Voici les étapes principales de mise en place.
 2. Copiez ces fichiers dans le dépôt.
 3. Activez GitHub Pages dans **Settings > Pages** en publiant depuis la branche principale.
 
-## 2. Préparer le serveur local
+## 2. Préparer le serveur local (sur macOS/Linux)
 
 Installez Python et `requests`, puis définissez votre clé API Météo-France dans une variable d'environnement.
-
-### Linux / macOS
+Les clés API Météo-France peuvent être demandées (gratuitement, création de compte requise) sur le site https://portail-api.meteofrance.fr/web/fr/
 
 ```bash
 export METEOFRANCE_API_KEY="VOTRE_NOUVELLE_CLE_API"
-pip install requests
-```
-
-### Windows PowerShell
-
-```powershell
-setx METEOFRANCE_API_KEY "VOTRE_NOUVELLE_CLE_API"
 pip install requests
 ```
 
@@ -46,7 +38,7 @@ Le script :
 
 ## 4. Automatisation horaire
 
-### Avec cron (Linux)
+### Avec cron (macOS/Linux)
 
 Éditez la crontab avec `crontab -e` puis ajoutez :
 
