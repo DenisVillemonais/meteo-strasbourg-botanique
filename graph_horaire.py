@@ -12,7 +12,8 @@ def generate_weather_graph() -> None:
         raise FileNotFoundError(f"Fichier introuvable : {INPUT_FILE}")
 
     df = pd.read_csv(INPUT_FILE, sep=";")
-    df["date"] = pd.to_datetime(df["date"], errors="coerce")
+    # df["date"] = pd.to_datetime(df["date"], errors="coerce")
+    df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d %H:%M:%S %Z", errors="coerce")
     df["temperature"] = pd.to_numeric(df["temperature"], errors="coerce")
     df["pluie"] = pd.to_numeric(df["pluie"], errors="coerce")
 
