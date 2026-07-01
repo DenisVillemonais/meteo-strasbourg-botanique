@@ -12,19 +12,28 @@ def generate_weather_graph() -> None:
         raise FileNotFoundError(f"Fichier introuvable : {INPUT_FILE}")
 
     df = pd.read_csv(INPUT_FILE, sep=";")
-    # df["date"] = pd.to_datetime(df["date"], errors="coerce")
-    df["date"] = pd.to_datetime(df["date"], format="%Y-%m-%d %H:%M:%S %Z", errors="coerce")
+    df["date"] = df["date"].str.replace(r"\s+[A-Z]+$", "", regex=True)
+    df["date"] = pd.to_datetime(df["date"],
+                                format="%Y-%m-%d %H:%M:%S",
+                                errors="coerce")
     df["temperature"] = pd.to_numeric(df["temperature"], errors="coerce")
     df["pluie"] = pd.to_numeric(df["pluie"], errors="coerce")
 
     df = df.dropna(subset=["date"]).sort_values("date")
-    if df.empty:
-        return
-
-    last = df["date"].max()
-    df = df[df["date"] >= last - pd.Timedelta(hours=23)]
+    print(f"{len(df)} lignes après parsing date")  # temporaire pour vérifier
 
     OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+
+    if df.empty:
+        # Crée un graphique “Aucune donnée” pour ne pas repartir sans fichier
+        plt.style.use("seaborn-v0_8-whitegrid")
+        fig, ax = plt.subplots(figsize=(10, 4))
+        ax.text(0.5, 0.5, "Aucune donnée disponible",
+                ha="center", va="center", transform=ax.transAxes, fontsize=14)
+        ax.set_axis_off()
+        fig.savefig(OUTPUT_FILE, dpi=160, bbox_inches="tight")
+        plt.close(fig)
+        return
 
     plt.style.use("seaborn-v0_8-whitegrid")
     fig, (ax1, ax2) = plt.subplots(
