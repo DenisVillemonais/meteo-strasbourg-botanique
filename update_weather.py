@@ -5,6 +5,7 @@ import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
+from history_horaire import generate_hourly_history
 
 import requests
 
@@ -107,6 +108,8 @@ else:
         majsite=result["site_updated_at"],
         succes_api=api_status_bool,
     )
+
+generate_hourly_history()
 
 subprocess.run(["git", "-C", str(REPO_DIR), "add", "-A"], check=True)
 subprocess.run(["git", "-C", str(REPO_DIR), "commit", "-m", "Mise à jour météo automatique"], check=False)
