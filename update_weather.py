@@ -1,3 +1,4 @@
+import csv
 import json
 import os
 import subprocess
@@ -27,12 +28,26 @@ headers = {
 def k_to_c(value):
     return round(value - 273.15, 2) if value is not None else None
 
+HISTORY_FILE = REPO_DIR / "data" / "history.csv"
+
+def append_history(date_iso, heure_locale, temperature, pluie, majsite, succes_api):
+    HISTORY_FILE.parent.mkdir(parents=True, exist_ok=True)
+    file_exists = HISTORY_FILE.exists()
+
+    with HISTORY_FILE.open("a", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f, delimiter=";")
+        if not file_exists:
+            writer.writerow(["date", "heurelocale", "temperature", "pluie", "majsite", "succesAPI"])
+        writer.writerow([date_iso, heure_locale, temperature, pluie, majsite, succes_api])
+
 r = requests.get(URL, params=params, headers=headers, timeout=30)
 r.raise_for_status()
 data = r.json()
 
 # Indicateur de succès/échec de l'appel API
 api_status = "succès API" if data else "échec API"
+api_status_bool = "yes" if data else "no"
+
 
 if not data:
     print("Aucune donnée renvoyée par l'API Météo-France pour cet instant, mise à jour partielle.")
@@ -85,6 +100,15 @@ else:
 
     DATA_FILE.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-subprocess.run(["git", "-C", str(REPO_DIR), "add", "data/latest.json"], check=True)
+    append_history(
+        date_iso=datetime.now(ZoneInfo("Europe/Paris")).strftime("%Y-%m-%d"),
+        heure_locale=datetime.now(ZoneInfo("Europe/Paris")).strftime("%H:%M:%S"),
+        temperature=result["temperature_c"],
+        pluie=result["pluie_1h_mm"],
+        majsite=result["site_updated_at"],
+        succes_api=api_status_bool,
+    )
+
+subprocess.run(["git", "-C", str(REPO_DIR), "add", "-A"], check=True)
 subprocess.run(["git", "-C", str(REPO_DIR), "commit", "-m", "Mise à jour météo automatique"], check=False)
 subprocess.run(["git", "-C", str(REPO_DIR), "push"], check=True)
