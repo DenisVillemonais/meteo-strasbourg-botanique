@@ -30,15 +30,15 @@ def k_to_c(value):
 
 HISTORY_FILE = REPO_DIR / "data" / "history.csv"
 
-def append_history(date_iso, heure_locale, temperature, pluie, majsite, succes_api):
+def append_history(date_iso, temperature, pluie, majsite, succes_api):
     HISTORY_FILE.parent.mkdir(parents=True, exist_ok=True)
     file_exists = HISTORY_FILE.exists()
 
     with HISTORY_FILE.open("a", newline="", encoding="utf-8") as f:
         writer = csv.writer(f, delimiter=";")
         if not file_exists:
-            writer.writerow(["date", "heurelocale", "temperature", "pluie", "majsite", "succesAPI"])
-        writer.writerow([date_iso, heure_locale, temperature, pluie, majsite, succes_api])
+            writer.writerow(["date", "temperature", "pluie", "majsite", "succesAPI"])
+        writer.writerow([date_iso, temperature, pluie, majsite, succes_api])
 
 r = requests.get(URL, params=params, headers=headers, timeout=30)
 r.raise_for_status()
@@ -101,8 +101,7 @@ else:
     DATA_FILE.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     append_history(
-        date_iso=dt_paris,
-        heure_locale=heure_paris,
+        date_iso=heure_paris,
         temperature=result["temperature_c"],
         pluie=result["pluie_1h_mm"],
         majsite=result["site_updated_at"],
