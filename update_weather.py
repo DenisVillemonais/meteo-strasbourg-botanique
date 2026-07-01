@@ -101,8 +101,8 @@ else:
     DATA_FILE.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     append_history(
-        date_iso=datetime.now(ZoneInfo("Europe/Paris")).strftime("%Y-%m-%d"),
-        heure_locale=datetime.now(ZoneInfo("Europe/Paris")).strftime("%H:%M:%S"),
+        date_iso=dt_paris,
+        heure_locale=heure_paris,
         temperature=result["temperature_c"],
         pluie=result["pluie_1h_mm"],
         majsite=result["site_updated_at"],
