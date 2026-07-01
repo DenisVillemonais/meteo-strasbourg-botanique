@@ -1,125 +1,226 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Strasbourg Botanique météo</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Station météo de Strasbourg Botanique : relevé instantané et graphique des 24 dernières heures." />
+  <title>Strasbourg Botanique — Météo</title>
   <style>
     :root {
-      color-scheme: light dark;
-      --bg: #f6f7f9;
+      --bg: #f4f7fb;
       --card: #ffffff;
       --text: #1f2937;
       --muted: #6b7280;
-      --accent: #0f766e;
-      --border: #d1d5db;
+      --primary: #2563eb;
+      --accent: #14b8a6;
+      --border: #e5e7eb;
+      --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
     }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #111827;
-        --card: #1f2937;
-        --text: #f9fafb;
-        --muted: #9ca3af;
-        --accent: #2dd4bf;
-        --border: #374151;
-      }
-    }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, sans-serif;
-      background: var(--bg);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       color: var(--text);
-      line-height: 1.5;
+      background: linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
     }
-    main {
-      max-width: 760px;
+
+    .page {
+      max-width: 1100px;
       margin: 0 auto;
       padding: 24px;
     }
+
+    header {
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(229,231,235,0.9);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
     .card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 8px 24px rgba(0,0,0,.06);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
     }
-    h1 { margin: 0 0 8px; font-size: 2rem; }
-    p { margin: 0 0 16px; color: var(--muted); }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
-      margin-top: 24px;
-    }
-    .metric {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
-    }
-    .label {
-      font-size: .9rem;
+
+    .metric-label {
       color: var(--muted);
-      margin-bottom: 6px;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
     }
-    .value {
-      font-size: 1.5rem;
+
+    .metric-value {
+      font-size: clamp(2rem, 4vw, 3.2rem);
       font-weight: 700;
-      color: var(--accent);
+      line-height: 1;
     }
-    .footer {
-      margin-top: 20px;
-      font-size: .95rem;
+
+    .metric-unit {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-left: 6px;
+      font-weight: 500;
+    }
+
+    .info-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .info-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .info-row span:first-child {
       color: var(--muted);
     }
-    .error {
-      color: #b91c1c;
+
+    .graph-card img {
+      width: 100%;
+      display: block;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
+      background: #fff;
+    }
+
+    .graph-card p {
+      color: var(--muted);
+      margin-top: 10px;
+      margin-bottom: 0;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
       font-weight: 600;
+      font-size: 0.92rem;
+      margin-top: 14px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.15);
+    }
+
+    @media (max-width: 800px) {
+      .grid { grid-template-columns: 1fr; }
+      .page { padding: 16px; }
+      header { padding: 22px; }
     }
   </style>
 </head>
 <body>
-  <main>
-    <section class="card">
+  <main class="page">
+    <header>
       <h1>Strasbourg Botanique</h1>
-      <p>Dernière observation horaire de la station Météo-France 67482001.</p>
-      <div id="status">Chargement…</div>
-      <div id="content" hidden>
-        <div class="grid">
-          <div class="metric"><div class="label">Température</div><div class="value" id="temperature">–</div></div>
-          <div class="metric"><div class="label">Pluie 1h</div><div class="value" id="pluie">–</div></div>
+      <p class="subtitle">Dernière observation horaire de la station Météo-France 67482001.</p>
+      <div class="status"><span class="dot"></span><span id="apiStatus">Chargement…</span></div>
+    </header>
+
+    <section class="grid">
+      <article class="card">
+        <div class="metric-label">Température instantanée</div>
+        <div><span id="temperature" class="metric-value">—</span><span class="metric-unit">°C</span></div>
+      </article>
+
+      <article class="card">
+        <div class="metric-label">Pluie 1h</div>
+        <div><span id="pluie" class="metric-value">—</span><span class="metric-unit">mm</span></div>
+      </article>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <div class="info-list">
+          <div class="info-row"><span>Heure locale</span><strong id="heureLocal">—</strong></div>
+          <div class="info-row"><span>Mise à jour du site</span><strong id="majSite">—</strong></div>
+          <div class="info-row"><span>Station</span><strong id="stationId">67482001</strong></div>
         </div>
-        <div class="footer">
-          <div>Heure locale : <strong id="heure"></strong></div>
-          <div>Mise à jour du site : <span id="maj"></span></div>
+      </article>
+
+      <article class="card">
+        <div class="info-list">
+          <div class="info-row"><span>Température max</span><strong id="tMax">—</strong></div>
+          <div class="info-row"><span>Température min</span><strong id="tMin">—</strong></div>
+          <div class="info-row"><span>Pression mer</span><strong id="pMer">—</strong></div>
         </div>
-      </div>
+      </article>
+    </section>
+
+    <section class="card graph-card">
+      <h2 style="margin-top:0;">24 dernières heures</h2>
+      <img src="data/graph_24h.png" alt="Graphique des 24 dernières heures de température et pluie" />
+      <p>La courbe de température et les précipitations horaires sont générées automatiquement par le script Python.</p>
     </section>
   </main>
-<script>
-  async function loadData() {
-    const status = document.getElementById('status');
-    const content = document.getElementById('content');
-    try {
-      const response = await fetch('./data/latest.json', { cache: 'no-store' });
-      if (!response.ok) throw new Error('Impossible de charger latest.json');
-      const data = await response.json();
-      document.getElementById('temperature').textContent = data.temperature_c != null ? data.temperature_c + ' °C' : '–';
-      document.getElementById('pluie').textContent = data.pluie_1h_mm != null ? data.pluie_1h_mm + ' mm' : '–';
-      document.getElementById('heure').textContent = data.heure_paris ?? '–';
 
-      const majSpan = document.getElementById('maj');
-      const majText = data.site_updated_at ?? '–';
-      const statusText = data.api_status ? ` (${data.api_status})` : '';
-      majSpan.textContent = majText + statusText;
+  <script>
+    async function loadData() {
+      try {
+        const response = await fetch('data/latest.json?v=' + Date.now());
+        const data = await response.json();
 
-      status.hidden = true;
-      content.hidden = false;
-    } catch (error) {
-      status.innerHTML = '<span class="error">Erreur : ' + error.message + '</span>';
+        document.getElementById('apiStatus').textContent = data.api_status ?? 'Statut inconnu';
+        document.getElementById('temperature').textContent = data.temperature_c ?? '—';
+        document.getElementById('pluie').textContent = data.pluie_1h_mm ?? '—';
+        document.getElementById('heureLocal').textContent = data.heure_paris ?? '—';
+        document.getElementById('majSite').textContent = data.site_updated_at ?? '—';
+        document.getElementById('tMax').textContent = data.temperature_max_c ?? '—';
+        document.getElementById('tMin').textContent = data.temperature_min_c ?? '—';
+        document.getElementById('pMer').textContent = data.pression_mer_pa ?? '—';
+      } catch (error) {
+        document.getElementById('apiStatus').textContent = 'Chargement impossible';
+      }
     }
-  }
-  loadData();
-</script>
+
+    loadData();
+    setInterval(loadData, 60000);
+  </script>
 </body>
 </html>

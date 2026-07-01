@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 from history_horaire import generate_hourly_history
+from graph_horaire import generate_weather_graph
 
 import requests
 
@@ -110,6 +111,7 @@ else:
     )
 
 generate_hourly_history()
+generate_weather_graph()
 
 subprocess.run(["git", "-C", str(REPO_DIR), "add", "-A"], check=True)
 subprocess.run(["git", "-C", str(REPO_DIR), "commit", "-m", "Mise à jour météo automatique"], check=False)
