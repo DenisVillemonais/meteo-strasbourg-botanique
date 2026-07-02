@@ -111,6 +111,66 @@ else:
     )
 
 generate_hourly_history()
+
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
+import csv
+
+HISTORY_HOURLY_FILE = REPO_DIR / "data" / "history_horaire.csv"
+
+def compute_24h_extrema() -> tuple[float | None, float | None]:
+    """Retourne (t_max_24h, t_min_24h) à partir de history_horaire.csv."""
+    if not HISTORY_HOURLY_FILE.exists():
+        return None, None
+
+    # now_paris est aware, mais on retire le tz pour comparer avec des datetimes naïfs
+    now_paris_aware = datetime.now(ZoneInfo("Europe/Paris"))
+    now_paris = now_paris_aware.replace(tzinfo=None)
+    cutoff = now_paris - timedelta(hours=24)
+
+    temperatures: list[float] = []
+
+    with HISTORY_HOURLY_FILE.open("r", encoding="utf-8", newline="") as f:
+        reader = csv.DictReader(f, delimiter=";")
+        for row in reader:
+            date_str = row.get("date")
+            temp_str = row.get("temperature")
+            if not date_str or not temp_str:
+                continue
+
+            try:
+                # Format : "YYYY-MM-DD HH:MM:SS CEST"
+                dt = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S %Z")
+            except ValueError:
+                # Si le format change un jour, on ignore la ligne
+                continue
+
+            if dt >= cutoff and dt <= now_paris:
+                try:
+                    temperatures.append(float(temp_str))
+                except ValueError:
+                    continue
+
+    if not temperatures:
+        return None, None
+
+    return max(temperatures), min(temperatures)
+
+# Calcul des extrema sur les dernières 24 h
+t_max_24h, t_min_24h = compute_24h_extrema()
+
+# On recharge latest.json, on le met à jour, puis on le réécrit
+latest_data = json.loads(DATA_FILE.read_text(encoding="utf-8"))
+
+latest_data["temperature_max_c"] = t_max_24h
+latest_data["temperature_min_c"] = t_min_24h
+
+DATA_FILE.write_text(
+    json.dumps(latest_data, ensure_ascii=False, indent=2) + "\n",
+    encoding="utf-8",
+)
+
+# Puis seulement après :
 generate_weather_graph()
 
 subprocess.run(["git", "-C", str(REPO_DIR), "add", "-A"], check=True)
