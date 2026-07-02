@@ -38,9 +38,27 @@
       backdrop-filter: blur(10px);
       border: 1px solid rgba(229,231,235,0.9);
       border-radius: 24px;
-      padding: 28px;
+      padding: 24px 28px;
       box-shadow: var(--shadow);
       margin-bottom: 24px;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    .header-left {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-end;
+      flex: 0 0 auto;
     }
 
     h1 {
@@ -50,16 +68,69 @@
     }
 
     .subtitle {
-      margin: 0;
+      margin: 0 0 6px;
       color: var(--muted);
       font-size: 1rem;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 20px;
-      margin-bottom: 24px;
+    .local-time {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-weight: 600;
+      font-size: 0.92rem;
+      margin-top: 10px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.15);
+    }
+
+    .header-metrics {
+      display: flex;
+      gap: 12px;
+    }
+
+    .header-metric-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 10px 14px;
+      text-align: right;
+      min-width: 140px;
+    }
+
+    .header-metric-label {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .header-metric-value {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .header-metric-unit {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-left: 4px;
+      font-weight: 500;
     }
 
     .card {
@@ -68,48 +139,6 @@
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding: 22px;
-    }
-
-    .metric-label {
-      color: var(--muted);
-      font-size: 0.95rem;
-      margin-bottom: 8px;
-    }
-
-    .metric-value {
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      font-weight: 700;
-      line-height: 1;
-    }
-
-    .metric-unit {
-      font-size: 1rem;
-      color: var(--muted);
-      margin-left: 6px;
-      font-weight: 500;
-    }
-
-    .info-list {
-      display: grid;
-      gap: 12px;
-      margin: 0;
-    }
-
-    .info-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .info-row:last-child {
-      border-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    .info-row span:first-child {
-      color: var(--muted);
     }
 
     .graph-card img {
@@ -127,77 +156,141 @@
       margin-bottom: 0;
     }
 
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: #eff6ff;
-      color: #1d4ed8;
-      font-weight: 600;
-      font-size: 0.92rem;
-      margin-top: 14px;
+    .graph-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 14px;
     }
 
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.15);
+    .graph-title {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .graph-extremes {
+      display: flex;
+      gap: 16px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .graph-extreme-label {
+      margin-right: 4px;
+    }
+
+    footer {
+      margin-top: 18px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--muted);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+    }
+
+    footer span strong {
+      color: var(--text);
+      font-weight: 600;
+      margin-left: 4px;
     }
 
     @media (max-width: 800px) {
-      .grid { grid-template-columns: 1fr; }
       .page { padding: 16px; }
-      header { padding: 22px; }
+
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header-right {
+        align-items: flex-start;
+      }
+
+      .header-metrics {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
     }
   </style>
 </head>
 <body>
   <main class="page">
+    <!-- Bandeau principal -->
     <header>
-      <h1>Strasbourg Botanique</h1>
-      <p class="subtitle">Dernière observation horaire de la station Météo-France 67482001.</p>
-      <div class="status"><span class="dot"></span><span id="apiStatus">Chargement…</span></div>
+      <div class="header-left">
+        <h1>Strasbourg Botanique</h1>
+        <p class="subtitle">Dernière observation horaire de la station Météo-France 67482001.</p>
+        <p class="local-time">Heure locale : <strong id="heureLocal">—</strong></p>
+      </div>
+
+      <div class="header-right">
+        <div class="header-metrics">
+          <div class="header-metric-card">
+            <div class="header-metric-label">Température instantanée</div>
+            <div>
+              <span id="temperature" class="header-metric-value">—</span>
+              <span class="header-metric-unit">°C</span>
+            </div>
+          </div>
+          <div class="header-metric-card">
+            <div class="header-metric-label">Pluie 1h</div>
+            <div>
+              <span id="pluie" class="header-metric-value">—</span>
+              <span class="header-metric-unit">mm</span>
+            </div>
+          </div>
+        </div>
+
+        <!--
+	<div class="status">
+          <span class="dot"></span>
+          <span id="apiStatus">Chargement…</span>
+        </div>
+	-->
+      </div>
     </header>
 
-    <section class="grid">
-      <article class="card">
-        <div class="metric-label">Température instantanée</div>
-        <div><span id="temperature" class="metric-value">—</span><span class="metric-unit">°C</span></div>
-      </article>
-
-      <article class="card">
-        <div class="metric-label">Pluie 1h</div>
-        <div><span id="pluie" class="metric-value">—</span><span class="metric-unit">mm</span></div>
-      </article>
-    </section>
-
-    <section class="grid">
-      <article class="card">
-        <div class="info-list">
-          <div class="info-row"><span>Heure locale</span><strong id="heureLocal">—</strong></div>
-          <div class="info-row"><span>Mise à jour du site</span><strong id="majSite">—</strong></div>
-          <div class="info-row"><span>Station</span><strong id="stationId">67482001</strong></div>
-        </div>
-      </article>
-
-      <article class="card">
-        <div class="info-list">
-          <div class="info-row"><span>Température max</span><strong id="tMax">—</strong></div>
-          <div class="info-row"><span>Température min</span><strong id="tMin">—</strong></div>
-          <div class="info-row"><span>Pression mer</span><strong id="pMer">—</strong></div>
-        </div>
-      </article>
-    </section>
-
+    <!-- Graphe immédiatement sous le bandeau -->
     <section class="card graph-card">
-      <h2 style="margin-top:0;">24 dernières heures</h2>
+      <div class="graph-header">
+        <h2 class="graph-title">24 dernières heures</h2>
+        <div class="graph-extremes">
+          <span>
+            <span class="graph-extreme-label">Température max :</span>
+            <strong id="tMax">—</strong><span> °C</span>
+          </span>
+          <span>
+            <span class="graph-extreme-label">Température min :</span>
+            <strong id="tMin">—</strong><span> °C</span>
+          </span>
+        </div>
+      </div>
+
       <img src="data/graph_24h.png" alt="Graphique des 24 dernières heures de température et pluie" />
       <p>La courbe de température et les précipitations horaires sont générées automatiquement par le script Python.</p>
     </section>
+
+    <!-- Bandeau bas : mise à jour du site + succès API -->
+    <footer>
+      <span>Mise à jour du site : <strong id="majSite">—</strong></span>
+      <!-- <span>Succès API : <strong id="apiStatusFooter">—</strong></span> -->
+      	<div class="status">
+          <span class="dot"></span>
+          <span id="apiStatus">Chargement…</span>
+        </div>
+    </footer>
   </main>
 
   <script>
@@ -206,16 +299,27 @@
         const response = await fetch('data/latest.json?v=' + Date.now());
         const data = await response.json();
 
-        document.getElementById('apiStatus').textContent = data.api_status ?? 'Statut inconnu';
+        // Statut API (haut + bas)
+        const apiStatusText = data.api_status ?? 'Statut inconnu';
+        document.getElementById('apiStatus').textContent = apiStatusText;
+        document.getElementById('apiStatusFooter').textContent = apiStatusText;
+
+        // Mesures principales
         document.getElementById('temperature').textContent = data.temperature_c ?? '—';
         document.getElementById('pluie').textContent = data.pluie_1h_mm ?? '—';
+
+        // Heure locale
         document.getElementById('heureLocal').textContent = data.heure_paris ?? '—';
+
+        // Mise à jour du site
         document.getElementById('majSite').textContent = data.site_updated_at ?? '—';
+
+        // Extrêmes de température (24h)
         document.getElementById('tMax').textContent = data.temperature_max_c ?? '—';
         document.getElementById('tMin').textContent = data.temperature_min_c ?? '—';
-        document.getElementById('pMer').textContent = data.pression_mer_pa ?? '—';
       } catch (error) {
         document.getElementById('apiStatus').textContent = 'Chargement impossible';
+        document.getElementById('apiStatusFooter').textContent = 'Chargement impossible';
       }
     }
 
