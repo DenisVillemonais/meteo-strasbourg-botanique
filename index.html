@@ -331,50 +331,52 @@
     </section>
   </main>
 
-  <script>
-    async function loadData() {
-      try {
-        const response = await fetch("data/latest.json?v=" + Date.now());
-        const data = await response.json();
+<script>
+  async function loadData() {
+    try {
+      const response = await fetch("data/latest.json?v=" + Date.now());
+      const data = await response.json();
 
-        // Température et pluie
-        document.getElementById("temperature").textContent =
-          data.temperature_c ?? "–";
-        document.getElementById("pluie").textContent =
-          data.pluie_1h_mm ?? "–";
+      document.getElementById("temperature").textContent =
+        data.temperature_c ?? "–";
+      document.getElementById("pluie").textContent =
+        data.pluie_1h_mm ?? "–";
 
-        // Heure locale
-        document.getElementById("heureLocal").textContent =
-          data.heure_paris ?? "Heure inconnue";
+      document.getElementById("heureLocal").textContent =
+        data.heure_paris ?? "Heure inconnue";
 
-        // Station (si tu veux la rendre dynamique)
-        if (data.station) {
-          document.getElementById("stationId").textContent = data.station;
-        }
-
-        // Températures max / min
-        document.getElementById("tMax").textContent =
-          data.temperature_max_c ?? "–";
-        document.getElementById("tMin").textContent =
-          data.temperature_min_c ?? "–";
-
-        // Mise à jour du site
-        document.getElementById("majSite").textContent =
-          data.site_updated_at ?? "Inconnue";
-
-        // Statut API (haut + bas)
-        const apiText = data.api_status ?? "Statut inconnu";
-        document.getElementById("apiStatus").textContent = apiText;
-        document.getElementById("apiStatusBottom").textContent = apiText;
-      } catch (error) {
-        const errText = "Chargement impossible";
-        document.getElementById("apiStatus").textContent = errText;
-        document.getElementById("apiStatusBottom").textContent = errText;
+      if (data.station) {
+        document.getElementById("stationId").textContent = data.station;
       }
-    }
 
-    loadData();
-    setInterval(loadData, 60000);
-  </script>
+      document.getElementById("tMax").textContent =
+        data.temperature_max_c ?? "–";
+      document.getElementById("tMin").textContent =
+        data.temperature_min_c ?? "–";
+
+      document.getElementById("majSite").textContent =
+        data.site_updated_at ?? "Inconnue";
+
+      const apiText = data.api_status ?? "Statut inconnu";
+      document.getElementById("apiStatus").textContent = apiText;
+      document.getElementById("apiStatusBottom").textContent = apiText;
+    } catch (error) {
+      const errText = "Chargement impossible";
+      document.getElementById("apiStatus").textContent = errText;
+      document.getElementById("apiStatusBottom").textContent = errText;
+    }
+  }
+
+  function refreshGraphOnce() {
+    const img = document.getElementById("graph24h");
+    if (!img) return;
+    const baseSrc = "data/graph_24h.png";
+    img.src = baseSrc + "?v=" + Date.now(); // nouveau URL à chaque chargement de page
+  }
+
+  // Au chargement de la page (une seule fois)
+  loadData();
+  refreshGraphOnce();
+</script>
 </body>
 </html>
