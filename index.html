@@ -1,330 +1,132 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Station météo de Strasbourg Botanique : relevé instantané et graphique des 24 dernières heures." />
-  <title>Strasbourg Botanique — Météo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Strasbourg Botanique météo</title>
   <style>
     :root {
-      --bg: #f4f7fb;
+      color-scheme: light dark;
+      --bg: #f6f7f9;
       --card: #ffffff;
       --text: #1f2937;
       --muted: #6b7280;
-      --primary: #2563eb;
-      --accent: #14b8a6;
-      --border: #e5e7eb;
-      --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
-      --radius: 18px;
+      --accent: #0f766e;
+      --border: #d1d5db;
     }
-
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111827;
+        --card: #1f2937;
+        --text: #f9fafb;
+        --muted: #9ca3af;
+        --accent: #2dd4bf;
+        --border: #374151;
+      }
+    }
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
       color: var(--text);
-      background: linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
+      line-height: 1.5;
     }
-
-    .page {
-      max-width: 1100px;
+    main {
+      max-width: 760px;
       margin: 0 auto;
       padding: 24px;
     }
-
-    header {
-      background: rgba(255,255,255,0.78);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(229,231,235,0.9);
-      border-radius: 24px;
-      padding: 24px 28px;
-      box-shadow: var(--shadow);
-      margin-bottom: 24px;
-
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 24px;
-    }
-
-    .header-left {
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-
-    .header-right {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: flex-end;
-      flex: 0 0 auto;
-    }
-
-    h1 {
-      margin: 0 0 8px;
-      font-size: clamp(1.8rem, 3vw, 2.6rem);
-      letter-spacing: -0.03em;
-    }
-
-    .subtitle {
-      margin: 0 0 6px;
-      color: var(--muted);
-      font-size: 1rem;
-    }
-
-    .local-time {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: #eff6ff;
-      color: #1d4ed8;
-      font-weight: 600;
-      font-size: 0.92rem;
-      margin-top: 10px;
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.15);
-    }
-
-    .header-metrics {
-      display: flex;
-      gap: 12px;
-    }
-
-    .header-metric-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 10px 14px;
-      text-align: right;
-      min-width: 140px;
-    }
-
-    .header-metric-label {
-      color: var(--muted);
-      font-size: 0.85rem;
-      margin-bottom: 4px;
-    }
-
-    .header-metric-value {
-      font-size: clamp(1.6rem, 3vw, 2.2rem);
-      font-weight: 700;
-      line-height: 1;
-    }
-
-    .header-metric-unit {
-      font-size: 0.95rem;
-      color: var(--muted);
-      margin-left: 4px;
-      font-weight: 500;
-    }
-
     .card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 22px;
-    }
-
-    .graph-card img {
-      width: 100%;
-      display: block;
       border-radius: 16px;
-      border: 1px solid var(--border);
-      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
-      background: #fff;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.06);
     }
-
-    .graph-card p {
-      color: var(--muted);
-      margin-top: 10px;
-      margin-bottom: 0;
-    }
-
-    .graph-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
+    h1 { margin: 0 0 8px; font-size: 2rem; }
+    p { margin: 0 0 16px; color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 16px;
-      margin-bottom: 14px;
+      margin-top: 24px;
     }
-
-    .graph-title {
-      margin: 0;
-      font-size: 1.1rem;
-    }
-
-    .graph-extremes {
-      display: flex;
-      gap: 16px;
-      font-size: 0.95rem;
-      color: var(--muted);
-    }
-
-    .graph-extreme-label {
-      margin-right: 4px;
-    }
-
-    footer {
-      margin-top: 18px;
-      background: rgba(255,255,255,0.9);
+    .metric {
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 10px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.9rem;
-      color: var(--muted);
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+      border-radius: 12px;
+      padding: 16px;
     }
-
-    footer span strong {
-      color: var(--text);
+    .label {
+      font-size: .9rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .footer {
+      margin-top: 20px;
+      font-size: .95rem;
+      color: var(--muted);
+    }
+    .error {
+      color: #b91c1c;
       font-weight: 600;
-      margin-left: 4px;
-    }
-
-    @media (max-width: 800px) {
-      .page { padding: 16px; }
-
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .header-right {
-        align-items: flex-start;
-      }
-
-      .header-metrics {
-        width: 100%;
-        flex-wrap: wrap;
-      }
-
-      footer {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-      }
     }
   </style>
 </head>
 <body>
-  <main class="page">
-    <!-- Bandeau principal -->
-    <header>
-      <div class="header-left">
-        <h1>Strasbourg Botanique</h1>
-        <p class="subtitle">Dernière observation horaire de la station Météo-France 67482001.</p>
-        <p class="local-time">Heure locale : <strong id="heureLocal">—</strong></p>
-      </div>
+  <main>
+    <section class="card">
+      <h1>Strasbourg Botanique</h1>
+      <p>Dernière observation horaire de la station Météo-France 67482001.</p>
+      <div id="status">Chargement…</div>
+      <div id="content" hidden>
+        <div class="grid">
+          <div class="metric"><div class="label">Température</div><div class="value" id="temperature">–</div></div>
+          <div class="metric"><div class="label">Pluie 1h</div><div class="value" id="pluie">–</div></div>
 
-      <div class="header-right">
-        <div class="header-metrics">
-          <div class="header-metric-card">
-            <div class="header-metric-label">Température instantanée</div>
-            <div>
-              <span id="temperature" class="header-metric-value">—</span>
-              <span class="header-metric-unit">°C</span>
-            </div>
-          </div>
-          <div class="header-metric-card">
-            <div class="header-metric-label">Pluie 1h</div>
-            <div>
-              <span id="pluie" class="header-metric-value">—</span>
-              <span class="header-metric-unit">mm</span>
-            </div>
-          </div>
+<section class="weather-graph">
+  <h2>24 dernières heures</h2>
+  <img src="data/graph_24h.png" alt="Graphique des 24 dernières heures de température et pluie" style="width:100%;max-width:1200px;height:auto;display:block;" />
+</section>
+
+
         </div>
-
-        <!--
-	<div class="status">
-          <span class="dot"></span>
-          <span id="apiStatus">Chargement…</span>
-        </div>
-	-->
-      </div>
-    </header>
-
-    <!-- Graphe immédiatement sous le bandeau -->
-    <section class="card graph-card">
-      <div class="graph-header">
-        <h2 class="graph-title">24 dernières heures</h2>
-        <div class="graph-extremes">
-          <span>
-            <span class="graph-extreme-label">Température max :</span>
-            <strong id="tMax">—</strong><span> °C</span>
-          </span>
-          <span>
-            <span class="graph-extreme-label">Température min :</span>
-            <strong id="tMin">—</strong><span> °C</span>
-          </span>
+        <div class="footer">
+          <div>Heure locale : <strong id="heure"></strong></div>
+          <div>Mise à jour du site : <span id="maj"></span></div>
         </div>
       </div>
-
-      <img src="data/graph_24h.png" alt="Graphique des 24 dernières heures de température et pluie" />
-      <p>La courbe de température et les précipitations horaires sont générées automatiquement par le script Python.</p>
     </section>
-
-    <!-- Bandeau bas : mise à jour du site + succès API -->
-    <footer>
-      <span>Mise à jour du site : <strong id="majSite">—</strong></span>
-      <!-- <span>Succès API : <strong id="apiStatusFooter">—</strong></span> -->
-      	<div class="status">
-          <span class="dot"></span>
-          <span id="apiStatus">Chargement…</span>
-        </div>
-    </footer>
   </main>
+<script>
+  async function loadData() {
+    const status = document.getElementById('status');
+    const content = document.getElementById('content');
+    try {
+      const response = await fetch('./data/latest.json', { cache: 'no-store' });
+      if (!response.ok) throw new Error('Impossible de charger latest.json');
+      const data = await response.json();
+      document.getElementById('temperature').textContent = data.temperature_c != null ? data.temperature_c + ' °C' : '–';
+      document.getElementById('pluie').textContent = data.pluie_1h_mm != null ? data.pluie_1h_mm + ' mm' : '–';
+      document.getElementById('heure').textContent = data.heure_paris ?? '–';
 
-  <script>
-    async function loadData() {
-      try {
-        const response = await fetch('data/latest.json?v=' + Date.now());
-        const data = await response.json();
+      const majSpan = document.getElementById('maj');
+      const majText = data.site_updated_at ?? '–';
+      const statusText = data.api_status ? ` (${data.api_status})` : '';
+      majSpan.textContent = majText + statusText;
 
-        // Statut API (haut + bas)
-        const apiStatusText = data.api_status ?? 'Statut inconnu';
-        document.getElementById('apiStatus').textContent = apiStatusText;
-        document.getElementById('apiStatusFooter').textContent = apiStatusText;
-
-        // Mesures principales
-        document.getElementById('temperature').textContent = data.temperature_c ?? '—';
-        document.getElementById('pluie').textContent = data.pluie_1h_mm ?? '—';
-
-        // Heure locale
-        document.getElementById('heureLocal').textContent = data.heure_paris ?? '—';
-
-        // Mise à jour du site
-        document.getElementById('majSite').textContent = data.site_updated_at ?? '—';
-
-        // Extrêmes de température (24h)
-        document.getElementById('tMax').textContent = data.temperature_max_c ?? '—';
-        document.getElementById('tMin').textContent = data.temperature_min_c ?? '—';
-      } catch (error) {
-        document.getElementById('apiStatus').textContent = 'Chargement impossible';
-        document.getElementById('apiStatusFooter').textContent = 'Chargement impossible';
-      }
+      status.hidden = true;
+      content.hidden = false;
+    } catch (error) {
+      status.innerHTML = '<span class="error">Erreur : ' + error.message + '</span>';
     }
-
-    loadData();
-    setInterval(loadData, 60000);
-  </script>
+  }
+  loadData();
+</script>
 </body>
 </html>
