@@ -322,8 +322,10 @@
         <strong id="majSite">Chargement...</strong>
       </div>
       <div class="footer-status-item">
-        <span>Statut API :</span>
-        <strong id="apiStatusBottom">Chargement...</strong>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          <span id="apiStatus">Chargement...</span>
+        </div>
       </div>
     </section>
   </main>
@@ -356,11 +358,9 @@
 
       const apiText = data.api_status ?? "Statut inconnu";
       document.getElementById("apiStatus").textContent = apiText;
-      document.getElementById("apiStatusBottom").textContent = apiText;
     } catch (error) {
       const errText = "Chargement impossible";
       document.getElementById("apiStatus").textContent = errText;
-      document.getElementById("apiStatusBottom").textContent = errText;
     }
   }
 
