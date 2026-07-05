@@ -4,7 +4,7 @@
   "heure_paris": "2026-07-05 03:00:00 CEST",
   "temperature_c": 19.7,
   "temperature_max_c": 29.0,
-  "temperature_min_c": 15.8,
+  "temperature_min_c": 19.7,
   "point_rosee_c": null,
   "pluie_1h_mm": 0,
   "humidite_pct": null,
@@ -15,6 +15,6 @@
   "pression_mer_pa": null,
   "latitude": 48.581833,
   "longitude": 7.768833,
-  "site_updated_at": "2026-07-05 03:50:05 CEST",
-  "api_status": "succès API"
+  "site_updated_at": "2026-07-05 10:05:25 CEST",
+  "api_status": "échec API"
 }
