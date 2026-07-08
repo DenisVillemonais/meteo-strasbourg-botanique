@@ -3,7 +3,7 @@
   "heure_utc": "2026-07-08T13:00:00Z",
   "heure_paris": "2026-07-08 15:00:00 CEST",
   "temperature_c": 27.9,
-  "temperature_max_c": 34.1,
+  "temperature_max_c": 32.7,
   "temperature_min_c": 20.4,
   "point_rosee_c": null,
   "pluie_1h_mm": 0,
@@ -15,6 +15,6 @@
   "pression_mer_pa": null,
   "latitude": 48.581833,
   "longitude": 7.768833,
-  "site_updated_at": "2026-07-08 15:55:05 CEST",
-  "api_status": "succès API"
+  "site_updated_at": "2026-07-08 16:00:05 CEST",
+  "api_status": "échec API"
 }
