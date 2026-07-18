@@ -1,9 +1,9 @@
 {
   "station": "67482001",
-  "heure_utc": "2026-07-18T06:00:00Z",
-  "heure_paris": "2026-07-18 08:00:00 CEST",
-  "temperature_c": 18.3,
-  "temperature_max_c": 25.1,
+  "heure_utc": "2026-07-18T12:00:00Z",
+  "heure_paris": "2026-07-18 14:00:00 CEST",
+  "temperature_c": 22.9,
+  "temperature_max_c": 22.9,
   "temperature_min_c": 16.5,
   "point_rosee_c": null,
   "pluie_1h_mm": 0,
@@ -15,6 +15,6 @@
   "pression_mer_pa": null,
   "latitude": 48.581833,
   "longitude": 7.768833,
-  "site_updated_at": "2026-07-18 08:25:04 CEST",
+  "site_updated_at": "2026-07-18 14:26:22 CEST",
   "api_status": "succès API"
 }
